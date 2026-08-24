@@ -1,1 +1,168 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Колесо Ronin</title>
+<script src="https://telegram.org/js/telegram-web-app.js"></script>
+<style>
+:root{
+  --bg:#0f0b0b;
+  --card:#1a1313;
+  --line:#332424;
+  --fg:#f4ece9;
+  --dim:#9a8983;
+  --acc:#d8232a;
+  --acc-soft:#f0453d;
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+body{margin:0;background:var(--bg);color:var(--fg);font:16px/1.5 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
+     display:flex;flex-direction:column;align-items:center;padding:18px 16px 32px;min-height:100vh}
+h1{font-size:19px;font-weight:600;margin:0 0 4px;letter-spacing:2px}
+.sub{color:var(--dim);font-size:13px;margin:0 0 18px;text-align:center;max-width:300px}
+.wrap{position:relative;width:min(340px,88vw)}
+.pin{position:absolute;top:-5px;left:50%;transform:translateX(-50%);width:0;height:0;z-index:3;
+     border-left:13px solid transparent;border-right:13px solid transparent;border-top:24px solid var(--fg);
+     filter:drop-shadow(0 2px 3px rgba(0,0,0,.6))}
+svg{display:block;width:100%;height:auto}
+#rotor{transform-origin:170px 170px;transition:transform 5s cubic-bezier(.16,.9,.26,1)}
+.panel{width:min(340px,88vw);margin-top:20px}
+input{width:100%;height:50px;background:var(--card);border:1px solid var(--line);border-radius:12px;
+      color:var(--fg);font-size:18px;text-align:center;letter-spacing:3px;outline:none}
+input:focus{border-color:var(--acc)}
+button{width:100%;height:52px;margin-top:12px;background:var(--acc);color:#fff;border:0;border-radius:12px;
+       font-size:16px;font-weight:600;cursor:pointer;letter-spacing:.3px}
+button:active{background:var(--acc-soft)}
+button:disabled{opacity:.45}
+.hint{color:var(--dim);font-size:12px;text-align:center;margin-top:12px;line-height:1.5}
+.err{color:#ff8a70;font-size:14px;text-align:center;margin-top:12px;min-height:20px}
+.result{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:20px;text-align:center;display:none}
+.result b{display:block;font-size:20px;margin-bottom:6px;color:var(--fg)}
+.result span{color:var(--dim);font-size:13px}
+</style>
+</head>
+<body>
 
+<h1>RONIN</h1>
+<p class="sub">Введи ФП с кассового чека и крути. Один чек — один прокрут.</p>
+
+<div class="wrap">
+<div class="pin"></div>
+<svg viewBox="0 0 340 340" xmlns="http://www.w3.org/2000/svg">
+<defs>
+  <clipPath id="hubClip"><circle cx="170" cy="170" r="36"/></clipPath>
+</defs>
+<g id="rotor">
+<path d="M170,170 L170,10 A160,160 0 0,1 322.17,120.55 Z" fill="#c2181c"/>
+<path d="M170,170 L322.17,120.55 A160,160 0 0,1 264.05,299.44 Z" fill="#6b1216"/>
+<path d="M170,170 L264.05,299.44 A160,160 0 0,1 120.55,322.17 Z" fill="#e03a2f"/>
+<path d="M170,170 L120.55,322.17 A160,160 0 0,1 17.83,219.45 Z" fill="#5c1416"/>
+<path d="M170,170 L17.83,219.45 A160,160 0 0,1 17.83,120.55 Z" fill="#a81f22"/>
+<path d="M170,170 L17.83,120.55 A160,160 0 0,1 75.95,40.56 Z" fill="#7a1418"/>
+<path d="M170,170 L75.95,40.56 A160,160 0 0,1 140.02,12.83 Z" fill="#d4302b"/>
+<path d="M170,170 L140.02,12.83 A160,160 0 0,1 170,10 Z" fill="#8c1519"/>
+
+<g transform="rotate(36,170,170)"><text x="170" y="44" text-anchor="middle" font-size="12" font-weight="500" fill="#fdf3f0">Час на PS5</text></g>
+<g transform="rotate(-72,170,170)"><text x="170" y="290" text-anchor="middle" font-size="12" font-weight="500" fill="#fdf3f0">100 рублей</text><text x="170" y="305" text-anchor="middle" font-size="10" fill="#f0d5d0">на счёт</text></g>
+<g transform="rotate(-9,170,170)"><text x="170" y="290" text-anchor="middle" font-size="12" font-weight="500" fill="#fdf3f0">Любимая</text><text x="170" y="305" text-anchor="middle" font-size="10" fill="#f0d5d0">газировка</text></g>
+<g transform="rotate(45,170,170)"><text x="170" y="290" text-anchor="middle" font-size="12" font-weight="500" fill="#fdf3f0">Чайник</text><text x="170" y="305" text-anchor="middle" font-size="10" fill="#f0d5d0">чая</text></g>
+<g transform="rotate(90,170,170)"><text x="170" y="296" text-anchor="middle" font-size="12" font-weight="500" fill="#fdf3f0">Чипсы</text></g>
+<g transform="rotate(306,170,170)"><text x="170" y="46" text-anchor="middle" font-size="12" font-weight="500" fill="#fdf3f0">Энергетик</text></g>
+<g transform="rotate(66.6,170,170)"><text x="104" y="170" text-anchor="end" dominant-baseline="central" font-size="11" font-weight="500" fill="#fdf3f0">500 бонусов</text></g>
+<g transform="rotate(84.6,170,170)"><text x="104" y="170" text-anchor="end" dominant-baseline="central" font-size="11" font-weight="500" fill="#fdf3f0">Кальян</text></g>
+
+<circle cx="170" cy="170" r="38" fill="#0f0b0b"/>
+<circle cx="170" cy="170" r="38" fill="none" stroke="#f4ece9" stroke-width="2"/>
+<text x="170" y="175" text-anchor="middle" font-size="12" font-weight="600" letter-spacing="1" fill="#f4ece9">RONIN</text>
+<image href="logo.png" x="134" y="134" width="72" height="72" clip-path="url(#hubClip)" preserveAspectRatio="xMidYMid slice"/>
+</g>
+</svg>
+</div>
+
+<div class="panel">
+  <div id="form">
+    <input id="fp" type="tel" inputmode="numeric" maxlength="10" placeholder="ФП с чека">
+    <button id="go">Крутить</button>
+    <p class="hint">ФП — число внизу чека рядом с буквами ФП или ФПД.</p>
+    <p class="err" id="err"></p>
+  </div>
+  <div class="result" id="result">
+    <b id="rname"></b>
+    <span id="rexp"></span>
+    <p class="hint">Приз сохранён в чате с ботом. Открой «Мои призы», когда придёшь в следующий раз.</p>
+  </div>
+</div>
+
+<script>
+var API = 'https://script.google.com/macros/s/AKfycbyrSmZXTJTHzP_WpN-gTIFOKb1KveGQl1WFMQpBZ4lYPxPU8-7UqpnyQN2JnhL1ADIT/exec';
+
+var MID = [36, 108, 171, 225, 270, 306, 336.6, 354.6];
+var SPAN = [72, 72, 54, 54, 36, 36, 25.2, 10.8];
+
+var tg = window.Telegram && window.Telegram.WebApp;
+if (tg) { tg.ready(); tg.expand(); }
+
+var turns = 0, busy = false;
+
+function jsonp(url) {
+  return new Promise(function (resolve, reject) {
+    var cb = 'cb' + Date.now();
+    var s = document.createElement('script');
+    var t = setTimeout(function () { cleanup(); reject(new Error('timeout')); }, 20000);
+    function cleanup() { clearTimeout(t); delete window[cb]; s.remove(); }
+    window[cb] = function (data) { cleanup(); resolve(data); };
+    s.src = url + '&callback=' + cb;
+    s.onerror = function () { cleanup(); reject(new Error('network')); };
+    document.body.appendChild(s);
+  });
+}
+
+function spinTo(i) {
+  var jitter = (Math.random() * 2 - 1) * (SPAN[i] / 2 - 2);
+  turns += 6;
+  document.getElementById('rotor').style.transform =
+    'rotate(' + (turns * 360 + (360 - MID[i]) - jitter) + 'deg)';
+}
+
+document.getElementById('go').onclick = function () {
+  if (busy) return;
+  var fp = document.getElementById('fp').value.replace(/\D/g, '');
+  var err = document.getElementById('err');
+  err.textContent = '';
+
+  if (!/^\d{6,10}$/.test(fp)) { err.textContent = 'ФП — от 6 до 10 цифр.'; return; }
+  if (!tg || !tg.initData) { err.textContent = 'Открой колесо через бота Ronin.'; return; }
+
+  busy = true;
+  this.disabled = true;
+  this.textContent = 'Крутим…';
+
+  jsonp(API + '?action=spin&fp=' + encodeURIComponent(fp) +
+        '&initData=' + encodeURIComponent(tg.initData))
+    .then(function (r) {
+      if (!r.ok) {
+        err.textContent = r.error || 'Что-то пошло не так.';
+        busy = false;
+        var b = document.getElementById('go');
+        b.disabled = false; b.textContent = 'Крутить';
+        return;
+      }
+      spinTo(r.index);
+      setTimeout(function () {
+        if (tg.HapticFeedback) tg.HapticFeedback.notificationOccurred('success');
+        document.getElementById('form').style.display = 'none';
+        document.getElementById('rname').textContent = r.prize;
+        document.getElementById('rexp').textContent = 'Действует до ' + r.expires;
+        document.getElementById('result').style.display = 'block';
+      }, 5100);
+    })
+    .catch(function () {
+      err.textContent = 'Нет связи с сервером. Попробуй ещё раз.';
+      busy = false;
+      var b = document.getElementById('go');
+      b.disabled = false; b.textContent = 'Крутить';
+    });
+};
+</script>
+</body>
+</html>
